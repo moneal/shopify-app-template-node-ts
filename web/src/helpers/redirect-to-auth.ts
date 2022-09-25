@@ -1,6 +1,10 @@
 import { Shopify } from "@shopify/shopify-api";
-
-export default async function redirectToAuth(req, res, app) {
+import type express from "express";
+const redirectToAuth = async (
+  req: express.Request,
+  res: express.Response,
+  app: express.Application
+) => {
   if (!req.query.shop) {
     res.status(500);
     return res.send("No shop provided");
@@ -11,13 +15,14 @@ export default async function redirectToAuth(req, res, app) {
   }
 
   return await serverSideRedirect(req, res, app);
-}
+};
+export default redirectToAuth;
 
-function clientSideRedirect(req, res) {
-  const shop = Shopify.Utils.sanitizeShop(req.query.shop);
+const clientSideRedirect = (req: express.Request, res: express.Response) => {
+  const shop = Shopify.Utils.sanitizeShop(req.query.shop as string) as string;
   const redirectUriParams = new URLSearchParams({
     shop,
-    host: req.query.host,
+    host: req.query.host as string,
   }).toString();
   const queryParams = new URLSearchParams({
     ...req.query,
@@ -26,16 +31,20 @@ function clientSideRedirect(req, res) {
   }).toString();
 
   return res.redirect(`/exitiframe?${queryParams}`);
-}
+};
 
-async function serverSideRedirect(req, res, app) {
+const serverSideRedirect = async (
+  req: express.Request,
+  res: express.Response,
+  app: express.Application
+) => {
   const redirectUrl = await Shopify.Auth.beginAuth(
     req,
     res,
-    req.query.shop,
+    req.query.shop as string,
     "/api/auth/callback",
     app.get("use-online-tokens")
   );
 
   return res.redirect(redirectUrl);
-}
+};

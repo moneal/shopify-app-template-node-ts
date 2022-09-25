@@ -1,34 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { BrowserRouter } from "react-router-dom";
+import { NavigationMenu } from "@shopify/app-bridge-react";
+import Routes from "./Routes";
 
-function App() {
-  const [count, setCount] = useState(0)
+import {
+  AppBridgeProvider,
+  QueryProvider,
+  PolarisProvider,
+} from "./components";
+
+export default function App() {
+  // Any .tsx or .jsx files in /pages will become a route
+  // See documentation for <Routes /> for more info
+  const pages = import.meta.glob("./pages/**/!(*.test.[jt]sx)*.([jt]sx)", {
+    eager: true,
+  });
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <PolarisProvider>
+      <BrowserRouter>
+        <AppBridgeProvider>
+          <QueryProvider>
+            <NavigationMenu
+              navigationLinks={[
+                {
+                  label: "Page name",
+                  destination: "/pagename",
+                },
+                {
+                  label: "GraphQL Proxy",
+                  destination: "/proxy",
+                },
+              ]}
+            />
+            <Routes pages={pages} />
+          </QueryProvider>
+        </AppBridgeProvider>
+      </BrowserRouter>
+    </PolarisProvider>
+  );
 }
-
-export default App

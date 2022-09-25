@@ -15,7 +15,7 @@ import { AppInstallations } from "./app_installations.js";
 
 const USE_ONLINE_TOKENS = false;
 
-const PORT = parseInt(process.env.BACKEND_PORT || process.env.PORT, 10);
+const PORT = parseInt(process.env.BACKEND_PORT || process.env.PORT || "8080", 10);
 
 // TODO: There should be provided by env vars
 const DEV_INDEX_PATH = `${process.cwd()}/frontend/`;

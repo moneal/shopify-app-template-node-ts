@@ -1,4 +1,8 @@
-# Shopify App Template - Node
+# Shopify App Template - Node with Typescript
+
+The below docs are kinda inline with what is going on in the code. Updated to Vite 3, React Query 4. Added graphql proxy example, Firebase for sessions, Logging with traces and more complex Docker build for Cloud Run.
+
+---
 
 This is a template for building a [Shopify app](https://shopify.dev/apps/getting-started) using Node and React. It contains the basics for building a Shopify app.
 
